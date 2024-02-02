@@ -62,6 +62,7 @@ const handleExceed: UploadProps['onExceed'] = (files) => {
 const handleChange: UploadProps['onChange'] = (_: UploadFile, uploadFiles:UploadFiles) =>{
     console.log(uploadFiles)
 }
+// @ts-ignore
 import {ReadPDF} from "../utils/PDFConvert";
 const textField = ref<String[]>([])
 
