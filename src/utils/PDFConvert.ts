@@ -9,10 +9,8 @@ interface Box {
     width: number
 }
 
-interface Line extends Box {
+interface Line extends Box, DirectionForLines {
     text: string
-    forward?: boolean
-    backward?: boolean
     repeat?: number
     repeatWith?: Line
 }
@@ -91,12 +89,11 @@ interface directionProperties {
     factor: number,
     done: boolean
 }
-interface Directions {
-    backward: directionProperties
-    forward: directionProperties
-}
+type direction = "forward" | "backward"
+type Directions = Record<direction, directionProperties>
+type DirectionForLines = Partial<Record<direction, boolean>>
 
-export async function ReadPDF(PDFFile: hasArrayBuffer) {
+export async function ReadPDF(PDFFile: hasArrayBuffer) :Promise<String[]>{
     const PDFArrayBuffer = await PDFFile.arrayBuffer()
     pdfjsDist.GlobalWorkerOptions.workerSrc = pdfWorkerMin.default
     const loadingTask = pdfjsDist.getDocument({ data: PDFArrayBuffer });
@@ -159,26 +156,22 @@ export async function ReadPDF(PDFFile: hasArrayBuffer) {
                 }
             }
             for (let offset = 0; offset < lines.length && offset < _lines.length; offset++) {
-                Object.keys(directions).forEach((direction) => {
-                    if (directions[direction as keyof Directions].done) {
-                        return
+                let key: (keyof Directions)
+                for (key in directions) {
+                    if (directions[key].done) {
+                        continue
                     }
-                    const factor = directions[direction as keyof Directions].factor
+                    const factor = directions[key].factor
                     const index = factor * offset + (factor > 0 ? 0 : -1)
                     const line = lines.slice(index)[0]
                     const _line = _lines.slice(index)[0]
                     if (isRepeat(line, _line)) {
-                        if (direction == "forward") {
-                            line.forward = true
-                        } else if (direction == "backward") {
-                            line.backward = true
-                        }
+                        line[key] = true
                         removeLines.add(line)
                     } else {
-                        directions[direction as keyof Directions].done = true
+                        directions[key].done = true
                     }
-
-                })
+                }
             }
             const content = { x: 0.2 * maxWidth, width: .6 * maxWidth, y: .2 * maxHeight, height: .6 * maxHeight }
             for (let j = 0; j < lines.length; j++) {
