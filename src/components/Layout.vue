@@ -68,6 +68,10 @@ const textField = ref<String[]>([])
 async function convert() {
     console.log("Start Convert")
     const file = fileList.value[0].raw
+    if (file == undefined){
+        console.log("File is undefined")
+        return
+    }
     const textList: String[] = await ReadPDF(file)
     textField.value = textList
 }
