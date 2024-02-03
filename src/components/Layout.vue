@@ -1,14 +1,15 @@
 <template>
     <el-container>
-        <el-header>
+        <el-header style="background-color:#409eff  ">
+            <el-row />
             <el-row>
-                <el-col :span="10" />
                 <el-col :span="4">
-                    <span>PDF to Notion
+                    <span style="text-align: center; color:azure">PDF to Notion
                     </span>
                 </el-col>
-                <el-col :span="10" />
+                <el-col :span="20" />
             </el-row>
+            <el-row />
         </el-header>
         <el-main>
             <el-row :gutter="20">
@@ -23,19 +24,17 @@
                 </el-col>
             </el-row>
             <el-row :gutter="20">
+                <el-upload action="#" ref="upload" :auto-upload="false" :limit="1" :on-exceed="handleExceed"
+                    v-model:file-list="fileList" :on-change="handleChange">
 
-                <el-upload action="#" ref="upload" :auto-upload="false" :limit="1" :on-exceed="handleExceed" v-model:file-list="fileList" :on-change="handleChange">
-                
-                        <template #trigger>
-                            <el-button type="primary">select PDF</el-button>
-                        </template>
-                        <el-button type="info" @click="convert">Convert
-                            </el-button>
-             
+                    <template #trigger>
+                        <el-button type="primary">select PDF</el-button>
+                    </template>
+                    <span style="margin-right:15px"></span>
+                    <el-button type="info" @click="convert">Convert</el-button>
                 </el-upload>
-
             </el-row>
-            <el-row v-for="(paragraph,index) in textField" :key="index">
+            <el-row v-for="(paragraph, index) in textField" :key="index">
                 <div>{{ paragraph }}</div>
             </el-row>
         </el-main>
@@ -53,23 +52,23 @@ const fileList = ref<UploadUserFile[]>([
 ])
 
 const handleExceed: UploadProps['onExceed'] = (files) => {
-  upload.value!.clearFiles()
-  const file = files[0] as UploadRawFile
-  file.uid = genFileId()
-  upload.value!.handleStart(file)
+    upload.value!.clearFiles()
+    const file = files[0] as UploadRawFile
+    file.uid = genFileId()
+    upload.value!.handleStart(file)
 }
 
-const handleChange: UploadProps['onChange'] = (_: UploadFile, uploadFiles:UploadFiles) =>{
+const handleChange: UploadProps['onChange'] = (_: UploadFile, uploadFiles: UploadFiles) => {
     console.log(uploadFiles)
 }
-// @ts-ignore
-import {ReadPDF} from "../utils/PDFConvert";
+
+import { ReadPDF } from "../utils/PDFConvert";
 const textField = ref<String[]>([])
 
-async function convert (){
+async function convert() {
     console.log("Start Convert")
-    const file =  fileList.value[0].raw
-    const textList:String[] = await ReadPDF(file)
+    const file = fileList.value[0].raw
+    const textList: String[] = await ReadPDF(file)
     textField.value = textList
 }
 
@@ -77,6 +76,6 @@ async function convert (){
 
 <style>
 .el-row {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 </style>

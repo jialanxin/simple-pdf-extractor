@@ -1,21 +1,6 @@
 import * as pdfjsDist from 'pdfjs-dist';
 import * as pdfWorkerMin from 'pdfjs-dist/build/pdf.worker.min?url';
 
-function fileToBinary(file) {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      
-      reader.onload = () => {
-        const arrayBuffer = reader.result;
-        resolve(arrayBuffer);
-      };
-  
-      reader.onerror = reject;
-  
-      reader.readAsArrayBuffer(file);
-    });
-  }
-
 function mergeSameLine(items) {
     const toLine = (item) => {
         const line = {
@@ -74,7 +59,7 @@ function isIntersectLines(lineA, lineB, maxWidth, maxHeight) {
 }
 
 export async function ReadPDF(PDFFile){
-    const PDFArrayBuffer = await fileToBinary(PDFFile)
+    const PDFArrayBuffer = await PDFFile.arrayBuffer()
     pdfjsDist.GlobalWorkerOptions.workerSrc = pdfWorkerMin.default
     const loadingTask = pdfjsDist.getDocument({data: PDFArrayBuffer});
     const pdfDoc = await loadingTask.promise;
