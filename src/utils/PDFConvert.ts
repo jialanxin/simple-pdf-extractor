@@ -108,6 +108,9 @@ export async function ReadPDF(PDFFile: hasArrayBuffer) :Promise<String[]>{
         const page = pages[i];
         const textContent = await page.getTextContent();
         //排除空行
+        if (!textContent.items.length) {
+            continue
+        }
         const items_with_str_properties = textContent.items.filter((item) => item.hasOwnProperty("str")) as TextItem[]
         const items = items_with_str_properties.filter((item) => item.str.trim().length)
         let lines = mergeSameLine(items)
