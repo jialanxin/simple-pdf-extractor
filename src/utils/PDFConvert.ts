@@ -117,6 +117,7 @@ export async function ReadPDF(PDFFile: hasArrayBuffer) :Promise<String[]>{
         const index = lines.findIndex(line => /(r?eferences?|acknowledgements)$/i.test(line.text.trim()))
         if (index != -1) {
             lines = lines.slice(0, index)
+            pageLines[i] = lines
             break
         }
         pageLines[i] = lines
