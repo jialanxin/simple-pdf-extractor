@@ -4,7 +4,7 @@
             <el-row />
             <el-row>
                 <el-col :span="4">
-                    <span style="text-align: center; color:azure">PDF to Notion
+                    <span style="text-align: center; color:azure">PDF 文本提取工具
                     </span>
                 </el-col>
                 <el-col :span="20" />
@@ -12,17 +12,6 @@
             <el-row />
         </el-header>
         <el-main>
-            <el-row :gutter="20">
-                <el-col :span="16">
-                    <el-input v-model="Token" placeholder="Notion Secret Token" />
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="primary">Save Token Locally</el-button>
-                </el-col>
-                <el-col :span="4">
-                    <el-button type="info">Load Local Token</el-button>
-                </el-col>
-            </el-row>
             <el-row :gutter="20">
                 <el-upload action="#" ref="upload" :auto-upload="false" :limit="1" :on-exceed="handleExceed"
                     v-model:file-list="fileList" :on-change="handleChange">
@@ -43,7 +32,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-const Token = ref('')
 import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile, UploadUserFile, UploadFile, UploadFiles } from 'element-plus'
 

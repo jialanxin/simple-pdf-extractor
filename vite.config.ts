@@ -17,6 +17,13 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),],
   build: {
-    target: "es2020",
-  }
+    target: "es2022",
+    minify: 'esbuild',
+    cssMinify: true,
+  },
+  optimizeDeps: {
+    esbuildOptions: {
+      target: 'es2022',
+    },
+  },
 })
